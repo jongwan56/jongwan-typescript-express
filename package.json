@@ -4,12 +4,16 @@
   "description": "An Express server written in TypeScript",
   "main": "src/server.ts",
   "scripts": {
-    "start": "NODE_ENV=production node ./dist/server.js"
+    "start": "NODE_ENV=production node ./dist/server.js",
+    "build": "rm -rf ./dist && tsc"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jongwan56/jongwan-typescript-express.git"
   },
   "author": "Jongwan Lee",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "4.2.4"
+  }
 }
