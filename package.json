@@ -5,7 +5,8 @@
   "main": "src/server.ts",
   "scripts": {
     "start": "NODE_ENV=production node ./dist/server.js",
-    "build": "rm -rf ./dist && tsc"
+    "build": "rm -rf ./dist && tsc",
+    "lint": "eslint --fix --ext .ts,.js . --ignore-path .gitignore ."
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,12 @@
   "author": "Jongwan Lee",
   "license": "MIT",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "4.22.0",
+    "@typescript-eslint/parser": "4.22.0",
+    "eslint": "7.25.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "prettier": "2.2.1",
     "typescript": "4.2.4"
   }
 }
