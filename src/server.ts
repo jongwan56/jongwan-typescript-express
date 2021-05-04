@@ -1,13 +1,15 @@
 import "reflect-metadata";
-import express from "express";
+import express, { Request } from "express";
 import { Container } from "typedi";
 import { useContainer as typeormUseContainer, createConnection } from "typeorm";
 import {
+  Action,
   useContainer as routingControllersUseContainer,
   useExpressServer,
 } from "routing-controllers";
 import { env } from "./env";
 import { logger } from "./utils/Logger";
+import { UserService } from "./services/UserService";
 
 export class App {
   public app: express.Application;
@@ -50,9 +52,17 @@ export class App {
   private useRoutingControllers() {
     routingControllersUseContainer(Container);
 
+    const userService = Container.get(UserService);
+
     useExpressServer(this.app, {
       cors: true,
       routePrefix: env.app.apiPrefix,
+      authorizationChecker: async (action: Action, roles: string[]) => {
+        const req = action.request as Request;
+        req.user = await userService.getUserFromRequest(req);
+        return !!req.user && !roles.length;
+      },
+      currentUserChecker: (action: Action) => (action.request as Request).user,
       controllers: [`${__dirname}/controllers/*.{ts,js}`],
       middlewares: [`${__dirname}/middlewares/*.{ts,js}`],
     });

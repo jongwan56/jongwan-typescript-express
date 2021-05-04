@@ -9,6 +9,7 @@ import {
   Index,
 } from "typeorm";
 import bcrypt from "bcrypt";
+import { UserResponseDto } from "../dtos/UserDto";
 
 @Entity()
 export class User extends BaseEntity {
@@ -41,5 +42,13 @@ export class User extends BaseEntity {
 
   async comparePassword(plainPassword: string): Promise<boolean> {
     return await bcrypt.compare(plainPassword, this.password);
+  }
+
+  toResponseDto(): UserResponseDto {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+    };
   }
 }

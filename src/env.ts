@@ -10,6 +10,10 @@ export const env = {
     port: Number(process.env.PORT) || 3000,
     apiPrefix: process.env.API_PREFIX || "/api",
   },
+  jwt: {
+    accessSecretKey: process.env.JWT_ACCESS_SECRET_KEY || "",
+    refreshSecretKey: process.env.JWT_REFRESH_SECRET_KEY || "",
+  },
   database: {
     host: process.env.DATABASE_HOST || "localhost",
     port: Number(process.env.DATABASE_PORT) || 5432,
