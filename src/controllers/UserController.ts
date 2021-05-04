@@ -8,6 +8,7 @@ import {
   HttpCode,
   Patch,
 } from "routing-controllers";
+import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
 import { UserService } from "../services/UserService";
 import {
   CreateUserDto,
@@ -26,12 +27,14 @@ export class UserController {
 
   @Post()
   @HttpCode(201)
+  @ResponseSchema(UserTokenResponseDto)
   public async register(@Body() createUserDto: CreateUserDto): Promise<UserTokenResponseDto> {
     const user = await this.userService.createUser(createUserDto);
     return this.userService.generateAndSaveTokens(user);
   }
 
   @Post("/login")
+  @ResponseSchema(UserTokenResponseDto)
   public async login(@Body() loginUserDto: LoginUserDto): Promise<UserTokenResponseDto> {
     const user = await this.userService.getUserByEmailAndPassword(loginUserDto);
 
@@ -44,12 +47,16 @@ export class UserController {
 
   @Get("/me")
   @Authorized()
+  @ResponseSchema(UserResponseDto)
+  @OpenAPI({ security: [{ bearerAuth: [] }] })
   public getCurrentUser(@CurrentUser() user: User): UserResponseDto {
     return user.toResponseDto();
   }
 
   @Patch("/me")
   @Authorized()
+  @ResponseSchema(UserResponseDto)
+  @OpenAPI({ security: [{ bearerAuth: [] }] })
   public async updateCurrentUser(
     @CurrentUser() user: User,
     @Body() updateUserDto: UpdateUserDto
@@ -58,6 +65,7 @@ export class UserController {
   }
 
   @Post("/token")
+  @ResponseSchema(UserTokenResponseDto)
   public async refreshAccessToken(
     @Body() refreshAccessTokenDto: RefreshAccessTokenDto
   ): Promise<UserTokenResponseDto> {

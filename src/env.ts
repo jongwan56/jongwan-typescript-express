@@ -23,4 +23,7 @@ export const env = {
     synchronize: process.env.DATABASE_SYNCHRONIZE === "true",
     logging: process.env.DATABASE_LOGGING === "true",
   },
+  swagger: {
+    route: process.env.SWAGGER_ROUTE || "/swagger",
+  },
 };
