@@ -6,6 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./dist/server.js",
     "build": "rm -rf ./dist && tsc",
+    "dev": "NODE_ENV=development nodemon",
     "lint": "eslint --fix --ext .ts,.js . --ignore-path .gitignore ."
   },
   "repository": {
@@ -42,7 +43,9 @@
     "eslint-plugin-prettier": "3.4.0",
     "husky": "4.3.8",
     "lint-staged": "10.5.4",
+    "nodemon": "2.0.7",
     "prettier": "2.2.1",
+    "ts-node": "9.1.1",
     "typescript": "4.2.4"
   }
 }
