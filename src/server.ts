@@ -1,7 +1,11 @@
 import "reflect-metadata";
 import express from "express";
 import { Container } from "typedi";
-import { useContainer, createConnection } from "typeorm";
+import { useContainer as typeormUseContainer, createConnection } from "typeorm";
+import {
+  useContainer as routingControllersUseContainer,
+  useExpressServer,
+} from "routing-controllers";
 import { env } from "./env";
 import { logger } from "./utils/Logger";
 
@@ -14,6 +18,7 @@ export class App {
 
   public async init(): Promise<void> {
     await this.createDatabaseConnection();
+    this.useRoutingControllers();
 
     const { port, apiPrefix } = env.app;
 
@@ -23,7 +28,7 @@ export class App {
   }
 
   private async createDatabaseConnection(): Promise<void> {
-    useContainer(Container);
+    typeormUseContainer(Container);
 
     const { host, port, username, password, database, synchronize, logging } = env.database;
 
@@ -40,6 +45,17 @@ export class App {
     });
 
     logger.info(`Database is connected to ${username}@${host}:${port}/${database}`);
+  }
+
+  private useRoutingControllers() {
+    routingControllersUseContainer(Container);
+
+    useExpressServer(this.app, {
+      cors: true,
+      routePrefix: env.app.apiPrefix,
+      controllers: [`${__dirname}/controllers/*.{ts,js}`],
+      middlewares: [`${__dirname}/middlewares/*.{ts,js}`],
+    });
   }
 }
 
