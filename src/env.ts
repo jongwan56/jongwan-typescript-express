@@ -10,4 +10,13 @@ export const env = {
     port: Number(process.env.PORT) || 3000,
     apiPrefix: process.env.API_PREFIX || "/api",
   },
+  database: {
+    host: process.env.DATABASE_HOST || "localhost",
+    port: Number(process.env.DATABASE_PORT) || 5432,
+    username: process.env.DATABASE_USERNAME || "postgres",
+    password: process.env.DATABASE_PASSWORD || "",
+    database: process.env.DATABASE_NAME || "postgres",
+    synchronize: process.env.DATABASE_SYNCHRONIZE === "true",
+    logging: process.env.DATABASE_LOGGING === "true",
+  },
 };
