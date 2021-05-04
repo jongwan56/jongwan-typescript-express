@@ -12,6 +12,8 @@ import {
 import { routingControllersToSpec } from "routing-controllers-openapi";
 import { validationMetadatasToSchemas } from "class-validator-jsonschema";
 import { serve as serveSwagger, setup as setupSwagger } from "swagger-ui-express";
+import { init as initSentry, Integrations as SentryIntegrations } from "@sentry/node";
+import { Integrations as SentryTracingIntegrations } from "@sentry/tracing";
 import { env } from "./env";
 import { logger } from "./utils/Logger";
 import { UserService } from "./services/UserService";
@@ -27,6 +29,7 @@ export class App {
 
   public async init(): Promise<void> {
     await this.createDatabaseConnection();
+    this.useSentry();
     this.setRoutingControllerOptions();
     this.useRoutingControllers();
     this.useSwagger();
@@ -56,6 +59,21 @@ export class App {
     });
 
     logger.info(`Database is connected to ${username}@${host}:${port}/${database}`);
+  }
+
+  private useSentry() {
+    const { dsn } = env.sentry;
+
+    initSentry({
+      dsn,
+      integrations: [
+        new SentryIntegrations.Http({ tracing: true }),
+        new SentryTracingIntegrations.Express({ app: this.app }),
+      ],
+      tracesSampleRate: 1.0,
+    });
+
+    logger.info(`Sentry is initialized to ${dsn}`);
   }
 
   private setRoutingControllerOptions() {

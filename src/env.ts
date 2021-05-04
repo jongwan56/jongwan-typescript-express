@@ -26,4 +26,7 @@ export const env = {
   swagger: {
     route: process.env.SWAGGER_ROUTE || "/swagger",
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN || "",
+  },
 };
