@@ -43,3 +43,11 @@ const options: LoggerOptions = {
 };
 
 export const logger: Logger = createLogger(options);
+
+export const stream = {
+  write: (message: string): void => {
+    logger.http(
+      message[message.length - 1] === "\n" ? message.substring(0, message.length - 1) : message
+    );
+  },
+};
